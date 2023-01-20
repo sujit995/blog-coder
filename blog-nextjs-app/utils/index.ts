@@ -7,3 +7,14 @@ export const formatDate = (dateString: string): string => {
     });
     return date;
 };
+
+export const makeCategory = (slug: string): string => {
+    if (typeof slug === 'string') {
+        return slug.split('-').join(' ');
+    }
+    return '';
+};
+
+export const capitalizeFirstLetter = (str: string): string => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};

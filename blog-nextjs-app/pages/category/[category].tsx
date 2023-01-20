@@ -8,6 +8,7 @@ import { AxiosResponse } from 'axios';
 import { fetchArticles, fetchCategories } from '../../http';
 import qs from 'qs';
 import ArticleList from '../../components/ArticleList';
+import { capitalizeFirstLetter, makeCategory } from '../../utils';
 
 interface IPropsType {
   categories: {
@@ -17,11 +18,12 @@ interface IPropsType {
   articles: {
     items: IArticle[];
     pagination: IPagination;
-  }
+  },
+  slug: string
 }
-const category = ({ categories, articles }: IPropsType) => {
+const category = ({ categories, articles, slug }: IPropsType) => {
   const formattedCategory = () => {
-    return 'Text';
+    return capitalizeFirstLetter(makeCategory(slug));
   }
   return (
     <>
@@ -62,7 +64,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       articles: {
         items: articles.data,
         pagination: articles.meta.pagination
-      }
+      },
+      slug: query.category
     }
   }
 }
