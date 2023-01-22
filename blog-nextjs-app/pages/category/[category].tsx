@@ -9,6 +9,9 @@ import { fetchArticles, fetchCategories } from '../../http';
 import qs from 'qs';
 import ArticleList from '../../components/ArticleList';
 import { capitalizeFirstLetter, makeCategory } from '../../utils';
+import Pagination from '../../components/Pagination';
+import { useRouter } from 'next/router';
+
 
 interface IPropsType {
   categories: {
@@ -22,6 +25,10 @@ interface IPropsType {
   slug: string
 }
 const category = ({ categories, articles, slug }: IPropsType) => {
+  const { page, pageCount } = articles.pagination;
+  const router = useRouter();
+  const { category: categorySlug } = router.query;
+
   const formattedCategory = () => {
     return capitalizeFirstLetter(makeCategory(slug));
   }
@@ -34,6 +41,11 @@ const category = ({ categories, articles, slug }: IPropsType) => {
       </Head>
       <Tabs categories={categories.items} />
       <ArticleList articles={articles.items} />
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        redirectUrl={`/category/${categorySlug}`}
+      />
     </>
   )
 }
@@ -47,7 +59,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       category: {
         slug: query.category,
       }
-    }
+    },
+    pagination: {
+      page: query.page ? +query.page : 1,
+      pageSize: 1,
+    },
   }
 
   const queryString = qs.stringify(options);

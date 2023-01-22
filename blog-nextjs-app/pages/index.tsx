@@ -4,21 +4,29 @@ import Head from 'next/head'
 import ArticleList from '../components/ArticleList';
 import Tabs from '../components/Tabs';
 import { fetchArticles, fetchCategories } from '../http';
-import { IArticle, ICategory, ICollectionResponse } from '../types';
+import { IArticle, IPagination, ICategory, ICollectionResponse } from '../types';
 import qs from 'qs';
+import Pagination from '../components/Pagination';
+import { useRouter } from 'next/router';
+
 
 interface IPropTypes {
   categories: {
     items: ICategory[];
   };
   articles: {
-    items: IArticle[]
+    items: IArticle[];
+    pagination: IPagination;
   }
 }
 
 const Home: NextPage<IPropTypes> = ({ categories, articles }) => {
 
-  console.log('categories', categories);
+  const router = useRouter();
+
+  const { page, pageCount } = articles.pagination;
+
+  
 
   return (
     <>
@@ -28,15 +36,18 @@ const Home: NextPage<IPropTypes> = ({ categories, articles }) => {
       </Head>
       <Tabs categories={categories.items} />
       <ArticleList articles={articles.items} />
+      <Pagination page={page} pageCount={pageCount} />
     </>
   )
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({query}) => {
 
   const options = {
     populate: ['author.avatar'],
-    // sort: ['id.desc'],
+    pagination: {
+      page: query.page ? query.page : 1,
+    }
   };
 
   const queryString = qs.stringify(options);

@@ -71,3 +71,15 @@ export interface IArticle {
     id: number;
     attributes: IArticlesAttribute;
 }
+
+export type TDirection = 1 | -1;
+
+export interface IQueryOptions {
+    filters: any;
+    sort: any;
+    populate: any;
+    pagination: {
+        page: number;
+        pageSize: number;
+    };
+}
