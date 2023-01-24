@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async ({query}) => {
     populate: ['author.avatar'],
     pagination: {
       page: query.page ? +query.page : 1,
-      pageSize: 1,
+      pageSize: 3,
     }
   };
 

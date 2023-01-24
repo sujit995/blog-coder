@@ -29,7 +29,7 @@ const Blogcard = ({ article }: IPropType) => {
                     {article.attributes.author.data.attributes.lastname} on
                     &nbsp;
                     <span className="text-gray-400">
-                        {article.attributes.createdAt}
+                        {formatDate(article.attributes.createdAt)}
                     </span>
                 </span>
             </div>
